@@ -19,8 +19,33 @@ const textStyle = { color: 'white', };
 
 function Home() {
 
-    let history = useHistory();
-    const [error, setError] = useState({ status: 0, errorMessage: null });
+  let history = useHistory();
+  const [existsAdm, setExistsAdm] = useState(false);
+  const [error, setError] = useState({ status: 0, errorMessage: null });
+  const admin = {
+    name: "Daniela",
+    username: "daniela",
+    password: "daniela",
+    role: "ADMIN"
+};
+  
+  useEffect(() => {
+    if (existsAdm == false) {
+      registerAdmin(admin);
+    }
+  }, []);
+
+  function registerAdmin(admin) {
+    setExistsAdm((existsAdm) => (true));
+    return API_ADMINS.postClient(admin, (result, status, err) => {
+        if (result !== null && (status === 200 || status === 201)) {
+            console.log("Successfully inserted admin with id: " + result);
+            props.reloadHandler();
+        } else {
+            setError((error) => ({ status: status, errorMessage: err }));
+        }
+    });
+} 
 
     const Login = details => {
         console.log(details);
