@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  tomcat-db-api:
+    build: .
+    image: image
+    ports:
+       - '8080:8080'
+    depends_on:
+      - db
+    environment:
+      - DB_IP=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=root
+      - DB_DBNAME=energyplatform
+
+
+volumes:
+    db_volume:
+      external: true
