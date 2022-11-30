@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Container, Jumbotron } from 'reactstrap';
 import { useHistory } from "react-router-dom";
 
@@ -13,14 +13,38 @@ const backgroundStyle = {
     backgroundRepeat: 'no-repeat',
     width: "100%",
     height: "1920px",
-    backgroundImage: url(${BackgroundImg})
+    backgroundImage: `url(${BackgroundImg})`
 };
 const textStyle = { color: 'white', };
 
 function Home() {
 
-    let history = useHistory();
-    const [error, setError] = useState({ status: 0, errorMessage: null });
+  let history = useHistory();
+  const [existsAdm, setExistsAdm] = useState(false);
+  const [error, setError] = useState({ status: 0, errorMessage: null });
+  const admin = {
+    name: "Daniela",
+    username: "daniela",
+    password: "daniela",
+    role: "ADMIN"
+};
+  
+  useEffect(() => {
+    if (existsAdm == false) {
+      registerAdmin(admin);
+    }
+  }, []);
+
+  function registerAdmin(admin) {
+    setExistsAdm((existsAdm) => (true));
+    return API_ADMINS.postClient(admin, (result, status, err) => {
+        if (result !== null && (status === 200 || status === 201)) {
+            console.log("Successfully inserted admin with id: " + result);
+        } else {
+            setError((error) => ({ status: status, errorMessage: err }));
+        }
+    });
+} 
 
     const Login = details => {
         console.log(details);
