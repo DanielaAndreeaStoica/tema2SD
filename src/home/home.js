@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Container, Jumbotron } from 'reactstrap';
 import { useHistory } from "react-router-dom";
 
@@ -13,7 +13,7 @@ const backgroundStyle = {
     backgroundRepeat: 'no-repeat',
     width: "100%",
     height: "1920px",
-    backgroundImage: `url(${BackgroundImg})`
+    backgroundImage: url(${BackgroundImg})
 };
 const textStyle = { color: 'white', };
 
@@ -40,7 +40,6 @@ function Home() {
     return API_ADMINS.postClient(admin, (result, status, err) => {
         if (result !== null && (status === 200 || status === 201)) {
             console.log("Successfully inserted admin with id: " + result);
-            props.reloadHandler();
         } else {
             setError((error) => ({ status: status, errorMessage: err }));
         }
